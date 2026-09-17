@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사건파일 #004 - 사진은 순식간에 퍼진다</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background:
+        radial-gradient(circle at top, #172554 0%, #0f172a 45%, #020617 100%);
+    color: #e5e7eb;
+    font-family: "Malgun Gothic", sans-serif;
+    line-height: 1.7;
+}
+
+/* =========================
+   ACCESS SCREEN
+========================= */
+
+#accessScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background:
+        radial-gradient(circle at center, #172554 0%, #020617 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.access-box {
+    width: min(90%, 520px);
+    padding: 45px 35px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    box-shadow:
+        0 0 40px rgba(59, 130, 246, 0.12),
+        inset 0 0 30px rgba(59, 130, 246, 0.03);
+    text-align: center;
+}
+
+.access-code {
+    color: #60a5fa;
+    font-size: 13px;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.access-box h1 {
+    margin: 0 0 10px;
+    font-size: 28px;
+    color: #f8fafc;
+}
+
+.access-box .subtitle {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.access-denied {
+    color: #f87171;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+#detective {
+    width: 100%;
+    padding: 14px 16px;
+    background: #020617;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    text-align: center;
+}
+
+#detective:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.auth-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-btn:hover {
+    background: #3b82f6;
+    transform: translateY(-1px);
+}
+
+#authMessage {
+    min-height: 25px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+#accessGranted {
+    display: none;
+}
+
+.granted {
+    color: #4ade80;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.granted-name {
+    color: #60a5fa;
+    font-weight: bold;
+}
+
+/* =========================
+   MAIN CASE
+========================= */
+
+#caseFile {
+    display: none;
+    width: min(92%, 850px);
+    margin: 0 auto;
+    padding: 35px 0 60px;
+}
+
+/* Header */
+
+.case-header {
+    padding: 28px 30px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid #334155;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.case-number {
+    color: #60a5fa;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.case-header h1 {
+    margin: 7px 0 5px;
+    color: #f8fafc;
+    font-size: 28px;
+}
+
+.case-header p {
+    margin: 0;
+    color: #94a3b8;
+}
+
+.detective-info {
+    margin-top: 18px;
+    padding: 11px 15px;
+    background: #020617;
+    border-left: 3px solid #3b82f6;
+    border-radius: 6px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.detective-info span {
+    color: #60a5fa;
+    font-weight: bold;
+}
+
+/* Section */
+
+.section {
+    background: rgba(15, 23, 42, 0.94);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 18px;
+    color: #f8fafc;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.section-title::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: #334155;
+}
+
+/* Alert */
+
+.alert-box {
+    padding: 18px;
+    background: rgba(127, 29, 29, 0.18);
+    border: 1px solid #7f1d1d;
+    border-radius: 9px;
+}
+
+.alert-label {
+    color: #f87171;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+}
+
+.alert-box p {
+    margin: 0;
+    color: #fca5a5;
+}
+
+/* =========================
+   CHAT EVIDENCE
+========================= */
+
+.chat-box {
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.chat-header {
+    padding: 13px 17px;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.chat-body {
+    padding: 18px;
+}
+
+.chat-row {
+    margin-bottom: 14px;
+}
+
+.chat-name {
+    color: #94a3b8;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.chat-message {
+    display: inline-block;
+    max-width: 82%;
+    padding: 10px 13px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+.chat-row.warning .chat-message {
+    border-color: #92400e;
+    background: rgba(120, 53, 15, 0.22);
+    color: #fde68a;
+}
+
+.chat-row.danger .chat-message {
+    border-color: #7f1d1d;
+    background: rgba(127, 29, 29, 0.2);
+    color: #fecaca;
+}
+
+.photo-evidence {
+    margin: 10px 0 15px;
+    padding: 18px;
+    border: 1px dashed #475569;
+    border-radius: 8px;
+    background: #0f172a;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.photo-icon {
+    display: block;
+    font-size: 36px;
+    margin-bottom: 5px;
+}
+
+.photo-evidence strong {
+    color: #cbd5e1;
+}
+
+/* =========================
+   SPREAD PATH
+========================= */
+
+.spread-path {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.spread-step {
+    flex: 1;
+    min-height: 105px;
+    padding: 15px 8px;
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 9px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.spread-icon {
+    font-size: 25px;
+    margin-bottom: 6px;
+}
+
+.spread-step strong {
+    color: #e2e8f0;
+    font-size: 13px;
+}
+
+.spread-step small {
+    color: #64748b;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.spread-arrow {
+    color: #60a5fa;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* =========================
+   VICTIM
+========================= */
+
+.victim-box {
+    border-left: 3px solid #f87171;
+    padding: 15px 18px;
+    background: rgba(127, 29, 29, 0.12);
+    border-radius: 0 8px 8px 0;
+}
+
+.victim-quote {
+    color: #fecaca;
+    font-size: 15px;
+    margin: 0 0 10px;
+}
+
+.victim-quote:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================
+   CLUES
+========================= */
+
+.clue-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.clue {
+    padding: 13px 15px;
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 13px;
+}
+
+.clue-number {
+    color: #60a5fa;
+    font-weight: bold;
+    margin-right: 6px;
+}
+
+/* =========================
+   MISSION
+========================= */
+
+.mission-box {
+    padding: 18px;
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 9px;
+}
+
+.mission {
+    display: flex;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid #1e293b;
+}
+
+.mission:last-child {
+    border-bottom: none;
+}
+
+.mission-number {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1d4ed8;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.mission-text {
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+/* =========================
+   SOLVE
+========================= */
+
+.solve-area {
+    text-align: center;
+    padding: 15px 0 25px;
+}
+
+.solve-btn {
+    padding: 15px 35px;
+    border: 1px solid #3b82f6;
+    border-radius: 8px;
+    background: #1d4ed8;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.solve-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+/* =========================
+   RESULT
+========================= */
+
+#result {
+    display: none;
+    padding: 30px;
+    margin-top: 10px;
+    background: rgba(20, 83, 45, 0.18);
+    border: 1px solid #166534;
+    border-radius: 12px;
+    text-align: center;
+}
+
+#result h2 {
+    margin: 0 0 10px;
+    color: #4ade80;
+    letter-spacing: 2px;
+}
+
+#result p {
+    margin: 5px 0;
+    color: #d1fae5;
+}
+
+#resultName {
+    color: #86efac;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    #caseFile {
+        width: 94%;
+        padding-top: 20px;
+    }
+
+    .case-header,
+    .section {
+        padding: 20px;
+    }
+
+    .case-header h1 {
+        font-size: 23px;
+    }
+
+    .clue-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .spread-path {
+        flex-direction: column;
+    }
+
+    .spread-step {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .spread-arrow {
+        transform: rotate(90deg);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     ACCESS SCREEN
+========================= -->
+
+<div id="accessScreen">
+
+    <div class="access-box">
+
+        <div id="accessDenied">
+
+            <div class="access-code">
+                SECURITY SYSTEM // CASE FILE
+            </div>
+
+            <h1>🕵️ 사건파일 #004</h1>
+
+            <div class="access-denied">
+                🔒 ACCESS DENIED
+            </div>
+
+            <div class="subtitle">
+                수사관 인증이 필요합니다.
+            </div>
+
+            <input
+                type="text"
+                id="detective"
+                placeholder="예) 김정보"
+                maxlength="20"
+            >
+
+            <button class="auth-btn" onclick="authenticate()">
+                🔐 수사관 인증
+            </button>
+
+            <div id="authMessage"></div>
+
+        </div>
+
+
+        <div id="accessGranted">
+
+            <div class="access-code">
+                SECURITY SYSTEM // AUTHORIZED
+            </div>
+
+            <div class="granted">
+                🔓 ACCESS GRANTED
+            </div>
+
+            <p>
+                <span class="granted-name" id="grantedName"></span>
+                수사관님
+            </p>
+
+            <p style="color:#94a3b8;">
+                사건 파일 열람 권한이 승인되었습니다.<br>
+                사건파일을 불러오는 중...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     CASE FILE
+========================= -->
+
+<div id="caseFile">
+
+    <!-- HEADER -->
+
+    <div class="case-header">
+
+        <div class="case-number">
+            CASE FILE #004
+        </div>
+
+        <h1>사진은 순식간에 퍼진다</h1>
+
+        <p>
+            동의 없이 공유된 사진이 빠르게 확산된 사건
+        </p>
+
+        <div class="detective-info">
+            🕵️ 담당 수사관 :
+            <span id="detectiveName"></span>
+        </div>
+
+    </div>
+
+
+    <!-- 사건 개요 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            🚨 사건 개요
+        </div>
+
+        <div class="alert-box">
+
+            <div class="alert-label">
+                DIGITAL ETHICS INCIDENT
+            </div>
+
+            <p>
+                한 학생의 사진이 단체채팅방에 게시된 후,
+                다른 채팅방과 SNS로 빠르게 퍼지기 시작했습니다.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- 증거물 01 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            📱 증거물 01 — 최초 유포 기록
+        </div>
+
+        <div class="chat-box">
+
+            <div class="chat-header">
+                💬 우리반 단체채팅방 <span style="color:#64748b;">(23명)</span>
+            </div>
+
+            <div class="chat-body">
+
+                <div class="chat-row">
+
+                    <div class="chat-name">
+                        철수
+                    </div>
+
+                    <div class="chat-message">
+                        ㅋㅋ 이거 봐
+                    </div>
+
+                </div>
+
+
+                <div class="photo-evidence">
+
+                    <span class="photo-icon">📷</span>
+
+                    <strong>친구 사진 업로드</strong>
+
+                    <br>
+
+                    <small>
+                        사진이 단체채팅방에 게시됨
+                    </small>
+
+                </div>
+
+
+                <div class="chat-row warning">
+
+                    <div class="chat-name">
+                        민수
+                    </div>
+
+                    <div class="chat-message">
+                        야 그거 올리지 마
+                    </div>
+
+                </div>
+
+
+                <div class="chat-row warning">
+
+                    <div class="chat-name">
+                        영희
+                    </div>
+
+                    <div class="chat-message">
+                        나 저 사진 올리는 거 싫은데...
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    margin:20px 0;
+                    text-align:center;
+                    color:#64748b;
+                    font-size:12px;
+                ">
+                    ───────── 10분 후 ─────────
+                </div>
+
+
+                <div class="chat-row danger">
+
+                    <div class="chat-name">
+                        수진
+                    </div>
+
+                    <div class="chat-message">
+                        다른 반 단톡에도 올라왔던데?
+                    </div>
+
+                </div>
+
+
+                <div class="chat-row danger">
+
+                    <div class="chat-name">
+                        민호
+                    </div>
+
+                    <div class="chat-message">
+                        인스타에도 퍼졌어
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 증거물 02 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            🔍 증거물 02 — 확산 경로
+        </div>
+
+        <p style="
+            color:#94a3b8;
+            font-size:14px;
+            margin-top:0;
+            margin-bottom:18px;
+        ">
+            사진이 처음 게시된 이후 어떤 경로로 확산되었는지 추적하시오.
+        </p>
+
+        <div class="spread-path">
+
+            <div class="spread-step">
+
+                <div class="spread-icon">📱</div>
+
+                <strong>단체채팅방</strong>
+
+                <small>최초 게시</small>
+
+            </div>
+
+            <div class="spread-arrow">
+                →
+            </div>
+
+            <div class="spread-step">
+
+                <div class="spread-icon">💬</div>
+
+                <strong>다른 채팅방</strong>
+
+                <small>재공유</small>
+
+            </div>
+
+            <div class="spread-arrow">
+                →
+            </div>
+
+            <div class="spread-step">
+
+                <div class="spread-icon">📸</div>
+
+                <strong>SNS</strong>
+
+                <small>추가 확산</small>
+
+            </div>
+
+            <div class="spread-arrow">
+                →
+            </div>
+
+            <div class="spread-step">
+
+                <div class="spread-icon">🌐</div>
+
+                <strong>학교 전체</strong>
+
+                <small>피해 확대</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 증거물 03 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            🗣️ 증거물 03 — 피해 학생 진술
+        </div>
+
+        <div class="victim-box">
+
+            <p class="victim-quote">
+                “삭제해 달라고 했는데 이미 너무 많은 사람에게 퍼졌어요.”
+            </p>
+
+            <p class="victim-quote">
+                “학교 오는 것도 힘들어졌어요.”
+            </p>
+
+            <p class="victim-quote">
+                “누가 올렸는지 알지만 멈출 수가 없었어요.”
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- 단서 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            🧩 수사 단서
+        </div>
+
+        <div class="clue-grid">
+
+            <div class="clue">
+                <span class="clue-number">01</span>
+                사진 게시에 대한 동의를 받지 않음
+            </div>
+
+            <div class="clue">
+                <span class="clue-number">02</span>
+                채팅방 참여자들이 사진을 재공유함
+            </div>
+
+            <div class="clue">
+                <span class="clue-number">03</span>
+                SNS를 통해 추가로 확산됨
+            </div>
+
+            <div class="clue">
+                <span class="clue-number">04</span>
+                피해 학생이 삭제를 요청함
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 미션 -->
+
+    <div class="section">
+
+        <div class="section-title">
+            🎯 수사 미션
+        </div>
+
+        <div class="mission-box">
+
+            <div class="mission">
+
+                <div class="mission-number">
+                    1
+                </div>
+
+                <div class="mission-text">
+                    이 사건에서 어떤 문제가 발생하였는가?
+                </div>
+
+            </div>
+
+
+            <div class="mission">
+
+                <div class="mission-number">
+                    2
+                </div>
+
+                <div class="mission-text">
+                    왜 피해가 빠르게 커졌는가?
+                </div>
+
+            </div>
+
+
+            <div class="mission">
+
+                <div class="mission-number">
+                    3
+                </div>
+
+                <div class="mission-text">
+                    피해 학생은 어떤 피해를 입었는가?
+                </div>
+
+            </div>
+
+
+            <div class="mission">
+
+                <div class="mission-number">
+                    4
+                </div>
+
+                <div class="mission-text">
+                    디지털 시민으로서 어떻게 행동해야 하는가?
+                </div>
+
+            </div>
+
+
+            <div class="mission">
+
+                <div class="mission-number">
+                    5
+                </div>
+
+                <div class="mission-text">
+                    비슷한 상황을 예방하려면 어떻게 해야 하는가?
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 사건 분석 완료 -->
+
+    <div class="solve-area">
+
+        <button class="solve-btn" onclick="solveCase()">
+            🔍 사건 분석 완료
+        </button>
+
+    </div>
+
+
+    <!-- CASE CLOSED -->
+
+    <div id="result">
+
+        <h2>🕵️ CASE CLOSED</h2>
+
+        <p>
+            <strong>
+                <span id="resultName"></span> 수사관님
+            </strong>
+        </p>
+
+        <p style="margin-top:10px;">
+            사건 분석을 완료했습니다.
+        </p>
+
+        <p style="margin-top:10px;color:#bbf7d0;">
+            분석 결과를 활동지에 기록해주세요.
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   AUTHENTICATION
+========================= */
+
+function authenticate(){
+
+    let name =
+        document.getElementById("detective").value.trim();
+
+    let message =
+        document.getElementById("authMessage");
+
+
+    if(name === ""){
+
+        message.style.color = "#f87171";
+
+        message.innerHTML =
+            "⚠️ 수사관 이름을 입력해주세요.";
+
+        return;
+    }
+
+
+    document.getElementById("grantedName").textContent = name;
+
+    document.getElementById("detectiveName").textContent = name;
+
+    document.getElementById("resultName").textContent = name;
+
+
+    document.getElementById("accessDenied").style.display = "none";
+
+    document.getElementById("accessGranted").style.display = "block";
+
+
+    setTimeout(function(){
+
+        document.getElementById("accessScreen").style.display = "none";
+
+        document.getElementById("caseFile").style.display = "block";
+
+        window.scrollTo(0,0);
+
+    },3000);
+
+}
+
+
+/* ENTER KEY */
+
+document.getElementById("detective").addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            authenticate();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   CASE SOLVED
+========================= */
+
+function solveCase(){
+
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("result").scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+}
+
+</script>
+
+</body>
+</html>
